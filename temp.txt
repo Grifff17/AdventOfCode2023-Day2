@@ -1,0 +1,38 @@
+
+            int sum = 0;
+            String[] data = fileRead("input.txt");
+
+            for(int lineNum = 0; lineNum < data.length; lineNum++) {
+                Dictionary<String, Integer> coloramountsDict = new Hashtable<>();
+                coloramountsDict.put("red", 0);
+                coloramountsDict.put("green", 0);
+                coloramountsDict.put("blue", 0);
+
+                String[] splitLine = data[lineNum].split(":");
+                int gameID = Integer.valueOf(splitLine[0].split(" ")[1]);
+                
+                String[] sets = splitLine[1].split(";");
+                for(int setNum = 0; setNum < sets.length; setNum++) {
+                    
+                    String[] colorAmounts = sets[setNum].split(",");
+                    for(int colorAmountNum = 0; colorAmountNum < colorAmounts.length; colorAmountNum++) {
+                        String[] colorAmountVals = colorAmounts[colorAmountNum].trim().split(" ");
+                        int amount = Integer.valueOf(colorAmountVals[0]);
+                        String currentColor = colorAmountVals[1];
+
+                        Enumeration colors = coloramountsDict.keys();
+                        while (colors.hasMoreElements()) {
+                            String color = colors.nextElement().toString();
+                            if (currentColor.equals(color)) {
+                                int currentamount = coloramountsDict.get(color);
+                                if (amount > currentamount) {
+                                    coloramountsDict.put(color, amount);
+                                }
+                            }
+                        }
+                    }
+                }
+                int powers = coloramountsDict.get("red") * coloramountsDict.get("green") * coloramountsDict.get("blue");
+                sum = sum + powers;
+            }
+            System.out.println(sum);
